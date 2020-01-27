@@ -1,11 +1,26 @@
+require "yaml" 
 # require modules here
 
-def load_library
-  # code goes here
+def load_library(file)
+  emotes = YAML.load_file(file)
+  jpemote_meaning = emotes.reduce({}) do |memo, (key, value)| 
+	  jpemote = emotes[key][1]
+	  memo[jpemote] = key 
+	  memo
+	end
+	engemote_jpemote = emotes.reduce({}) do |memo, (key, value)| 
+		  engemote = emotes[key][0]
+		  memo[engemote] = emotes[key][1] 
+		  memo
+	end
+  library_hash = {
+    :get_meaning => jpemote_meaning, :get_emoticon => engemote_jpemote
+  } 
 end
 
-def get_japanese_emoticon
-  # code goes here
+def get_japanese_emoticon(file, emoticon)
+  load_library(file)
+  library_hash[:get_emoticon][emoticon]
 end
 
 def get_english_meaning
